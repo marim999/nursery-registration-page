@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حضانة عالم صغارنا | نموذج تجريبي</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Lalezar&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                        heading: ['Lalezar', 'cursive']
+                    },
+                    colors: {
+                        primary: '#FF8FAB', // وردي باستيل
+                        secondary: '#FB6F92', // وردي داكن قليلاً
+                        accent: '#FFE5EC', // خلفية هادئة جداً
+                        info: '#83C5BE', // أخضر مائل للأزرق الهادئ
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .view-section { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .form-step { display: none; }
+        .form-step.active { display: block; animation: fadeIn 0.3s ease; }
+        .glass-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body class="bg-accent text-gray-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="glass-nav sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="navigate('home')">
+                <i class="fa-solid fa-shapes text-secondary text-3xl"></i>
+                <h1 class="font-heading text-2xl text-secondary mt-2">عالم صغارنا</h1>
+            </div>
+            
+            <div class="hidden md:flex gap-8 font-semibold text-gray-600">
+                <button onclick="navigate('home')" class="hover:text-secondary transition">الرئيسية</button>
+                <button onclick="navigate('portal')" class="hover:text-secondary transition">بوابة الآباء</button>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <!-- زر مخفي للإدارة -->
+                <button onclick="navigate('admin')" class="text-gray-400 hover:text-gray-700 transition" title="لوحة تحكم الإدارة">
+                    <i class="fa-solid fa-lock text-xl"></i>
+                </button>
+                <button onclick="navigate('register')" class="bg-secondary text-white px-6 py-2 rounded-full font-bold shadow-md hover:bg-pink-600 transition">
+                    سجل طفلك
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow">
+        
+        <!-- 1. الصفحة الرئيسية -->
+        <section id="home" class="view-section active py-12">
+            <div class="container mx-auto px-6 flex flex-col-reverse md:flex-row items-center gap-12">
+                <div class="md:w-1/2 text-center md:text-right">
+                    <h2 class="font-heading text-5xl md:text-6xl text-gray-800 leading-tight mb-6">
+                        نصنع <span class="text-secondary">ذكريات</span> سعيدة، ونبني مستقبلاً مشرقاً!
+                    </h2>
+                    <p class="text-lg text-gray-600 mb-8">
+                        بيئة آمنة وملهمة صممت خصيصاً لتنمية مهارات طفلك واكتشاف مواهبه من خلال اللعب والتعلم التفاعلي.
+                    </p>
+                    <button onclick="navigate('register')" class="bg-info text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-teal-500 transition text-lg">
+                        احجز مكان طفلك الآن
+                    </button>
+                </div>
+                <div class="md:w-1/2">
+                    <img src="https://images.unsplash.com/photo-1545558014-8692077e9b5c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="أطفال يلعبون" class="rounded-[3rem] shadow-2xl w-full object-cover h-96 border-8 border-white">
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. صفحة التسجيل -->
+        <section id="register" class="view-section py-12">
+            <div class="container mx-auto px-4 max-w-3xl">
+                <div class="bg-white rounded-3xl shadow-xl p-8">
+                    <h2 class="font-heading text-3xl text-secondary text-center mb-2">طلب التحاق جديد</h2>
+                    <p class="text-gray-500 text-center mb-8">سجلي بيانات طفلك وسنقوم بالتواصل معك فوراً</p>
+
+                    <div class="flex justify-between items-center mb-8 relative px-4">
+                        <div class="absolute left-0 top-1/2 transform -translate-y-1/2 w-full h-1 bg-gray-100 -z-10"></div>
+                        <div id="progress-line" class="absolute right-0 top-1/2 transform -translate-y-1/2 w-1/3 h-1 bg-secondary -z-10 transition-all duration-300"></div>
+                        
+                        <div class="step-indicator bg-secondary text-white w-10 h-10 rounded-full flex items-center justify-center font-bold shadow">1</div>
+                        <div class="step-indicator bg-gray-100 text-gray-400 w-10 h-10 rounded-full flex items-center justify-center font-bold shadow">2</div>
+                        <div class="step-indicator bg-gray-100 text-gray-400 w-10 h-10 rounded-full flex items-center justify-center font-bold shadow">3</div>
+                    </div>
+
+                    <form id="registrationForm">
+                        <!-- Step 1 -->
+                        <div class="form-step active" id="step1">
+                            <h3 class="font-bold text-lg mb-4 text-gray-700">بيانات الطفل الأساسية</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-semibold mb-1">اسم الطفل رباعي</label>
+                                    <input type="text" id="inp_childName" class="w-full border-2 border-gray-100 rounded-xl p-3 focus:border-secondary outline-none" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold mb-1">تاريخ الميلاد</label>
+                                    <input type="date" id="inp_birthDate" class="w-full border-2 border-gray-100 rounded-xl p-3 focus:border-secondary outline-none" required>
+                                </div>
+                            </div>
+                            <div class="mt-6 flex justify-end">
+                                <button type="button" onclick="nextStep(2)" class="bg-secondary text-white px-6 py-2 rounded-xl font-bold hover:bg-pink-600">التالي <i class="fa-solid fa-arrow-left mr-2"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="form-step" id="step2">
+                            <h3 class="font-bold text-lg mb-4 text-gray-700">بيانات الوالدين</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-semibold mb-1">اسم الأم</label>
+                                    <input type="text" id="inp_motherName" class="w-full border-2 border-gray-100 rounded-xl p-3 focus:border-secondary outline-none" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold mb-1">رقم هاتف الأم</label>
+                                    <input type="tel" id="inp_motherPhone" class="w-full border-2 border-gray-100 rounded-xl p-3 focus:border-secondary outline-none" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold mb-1">اسم الأب</label>
+                                    <input type="text" id="inp_fatherName" class="w-full border-2 border-gray-100 rounded-xl p-3 focus:border-secondary outline-none" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold mb-1">رقم هاتف الأب</label>
+                                    <input type="tel" id="inp_fatherPhone" class="w-full border-2 border-gray-100 rounded-xl p-3 focus:border-secondary outline-none" required>
+                                </div>
+                            </div>
+                            <div class="mt-6 flex justify-between">
+                                <button type="button" onclick="prevStep(1)" class="bg-gray-100 text-gray-700 px-6 py-2 rounded-xl font-bold hover:bg-gray-200"><i class="fa-solid fa-arrow-right ml-2"></i> السابق</button>
+                                <button type="button" onclick="nextStep(3)" class="bg-secondary text-white px-6 py-2 rounded-xl font-bold hover:bg-pink-600">التالي <i class="fa-solid fa-arrow-left mr-2"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="form-step" id="step3">
+                            <h3 class="font-bold text-lg mb-4 text-gray-700">ملاحظات إضافية</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-semibold mb-1">هل يعاني الطفل من أي حساسية؟</label>
+                                    <textarea id="inp_medical" class="w-full border-2 border-gray-100 rounded-xl p-3 focus:border-secondary outline-none" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="mt-6 flex justify-between">
+                                <button type="button" onclick="prevStep(2)" class="bg-gray-100 text-gray-700 px-6 py-2 rounded-xl font-bold hover:bg-gray-200"><i class="fa-solid fa-arrow-right ml-2"></i> السابق</button>
+                                <button type="submit" class="bg-info text-white px-8 py-2 rounded-xl font-bold hover:bg-teal-500 shadow-lg">إتمام التسجيل</button>
+                            </div>
+                        </div>
+                    </form>
+                    
+                    <!-- Success Message -->
+                    <div id="success-msg" class="hidden text-center py-10">
+                        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fa-solid fa-check text-4xl text-green-500"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">تم تسجيل طفلك بنجاح!</h3>
+                        <p class="text-gray-500">سيتم مراجعة الطلب من الإدارة، ويمكنك متابعة حالته قريباً.</p>
+                        <button onclick="navigate('home')" class="mt-6 text-secondary underline font-bold">العودة للرئيسية</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. بوابة الآباء -->
+        <section id="portal" class="view-section py-12">
+            <div class="container mx-auto px-6 text-center max-w-md mt-10">
+                <div class="bg-white p-8 rounded-3xl shadow-xl border-t-8 border-secondary">
+                    <i class="fa-solid fa-mobile-screen-button text-5xl text-info mb-4"></i>
+                    <h2 class="font-heading text-3xl text-gray-800 mb-2">بوابة الآباء</h2>
+                    <p class="text-gray-500 mb-6">هنا سيتمكن الآباء من تسجيل الدخول لمتابعة تقارير أطفالهم اليومية (الوجبات، النشاط، الصور).</p>
+                    <button onclick="navigate('home')" class="bg-gray-100 text-gray-700 w-full py-3 rounded-xl font-bold hover:bg-gray-200">عودة</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. لوحة الإدارة السحرية -->
+        <section id="admin" class="view-section py-12">
+            <div class="container mx-auto px-6 max-w-6xl">
+                <div class="bg-white rounded-3xl shadow-xl p-8 border-t-8 border-gray-800">
+                    <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b pb-4 gap-4">
+                        <div>
+                            <h2 class="font-heading text-3xl text-gray-800"><i class="fa-solid fa-laptop-code mr-2 text-secondary"></i> لوحة تحكم مديرة الحضانة</h2>
+                            <p class="text-gray-500 text-sm mt-1">هنا تظهر بيانات الأطفال المسجلين فوراً من الموقع.</p>
+                        </div>
+                        <button onclick="clearAdminData()" class="bg-red-50 text-red-500 px-4 py-2 rounded-lg font-bold hover:bg-red-100 transition">
+                            <i class="fa-solid fa-trash mr-1"></i> مسح البيانات (للتجربة)
+                        </button>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right border-collapse min-w-[800px]">
+                            <thead>
+                                <tr class="bg-gray-50 text-gray-600 text-sm">
+                                    <th class="p-4 border-b font-bold rounded-tr-xl">اسم الطفل</th>
+                                    <th class="p-4 border-b font-bold">السن</th>
+                                    <th class="p-4 border-b font-bold">اسم الأم</th>
+                                    <th class="p-4 border-b font-bold">رقم التواصل</th>
+                                    <th class="p-4 border-b font-bold rounded-tl-xl">الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-table-body">
+                                <!-- البيانات ستظهر هنا عبر الجافاسكريبت -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // التنقل بين الصفحات
+        function navigate(viewId) {
+            document.querySelectorAll('.view-section').forEach(section => section.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            window.scrollTo(0, 0);
+            if(viewId === 'admin') renderAdminTable();
+        }
+
+        // الفورم
+        function updateProgress(step) {
+            const indicators = document.querySelectorAll('.step-indicator');
+            const line = document.getElementById('progress-line');
+            line.style.width = step === 1 ? '33%' : step === 2 ? '66%' : '100%';
+            
+            indicators.forEach((ind, i) => {
+                if (i < step) { ind.className = "step-indicator bg-secondary text-white w-10 h-10 rounded-full flex items-center justify-center font-bold shadow"; }
+                else { ind.className = "step-indicator bg-gray-100 text-gray-400 w-10 h-10 rounded-full flex items-center justify-center font-bold shadow"; }
+            });
+        }
+        function nextStep(step) { document.querySelectorAll('.form-step').forEach(el => el.classList.remove('active')); document.getElementById('step' + step).classList.add('active'); updateProgress(step); }
+        function prevStep(step) { nextStep(step); }
+
+        // قواعد البيانات المصغرة (Admin Logic)
+        let registrations = JSON.parse(localStorage.getItem('nursery_db')) || [];
+
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const birth = new Date(document.getElementById('inp_birthDate').value);
+            const today = new Date();
+            let age = today.getFullYear() - birth.getFullYear();
+            
+            const newChild = {
+                id: Date.now(),
+                childName: document.getElementById('inp_childName').value,
+                age: isNaN(age) ? "غير محدد" : age + " سنوات",
+                motherName: document.getElementById('inp_motherName').value,
+                phone: document.getElementById('inp_motherPhone').value,
+                medical: document.getElementById('inp_medical').value,
+                status: 'pending'
+            };
+            
+            registrations.push(newChild);
+            localStorage.setItem('nursery_db', JSON.stringify(registrations));
+            
+            this.style.display = 'none';
+            document.querySelector('.relative.px-4').style.display = 'none';
+            document.getElementById('success-msg').classList.remove('hidden');
+            document.getElementById('success-msg').classList.add('block', 'animate-[fadeIn_0.5s_ease]');
+            this.reset();
+        });
+
+        function renderAdminTable() {
+            const tbody = document.getElementById('admin-table-body');
+            tbody.innerHTML = '';
+            
+            if(registrations.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="p-8 text-center text-gray-400">لا يوجد أطفال مسجلين حالياً. جرب إضافة طفل من صفحة التسجيل!</td></tr>';
+                return;
+            }
+            
+            registrations.forEach(child => {
+                let statusBadge = '';
+                if(child.status === 'accepted') statusBadge = '<span class="bg-green-100 text-green-600 text-xs px-2 py-1 rounded-full font-bold">مقبول</span>';
+                else if(child.status === 'rejected') statusBadge = '<span class="bg-red-100 text-red-600 text-xs px-2 py-1 rounded-full font-bold">مرفوض</span>';
+                
+                const tr = document.createElement('tr');
+                tr.className = 'border-b hover:bg-gray-50 transition';
+                tr.innerHTML = `
+                    <td class="p-4 font-bold text-gray-800">${child.childName} ${statusBadge}</td>
+                    <td class="p-4 text-gray-600">${child.age}</td>
+                    <td class="p-4 text-gray-600">${child.motherName}</td>
+                    <td class="p-4 text-gray-600" dir="ltr">${child.phone}</td>
+                    <td class="p-4 flex gap-2">
+                        <button onclick="updateStatus(${child.id}, 'accepted')" class="bg-green-50 text-green-600 px-3 py-1 rounded hover:bg-green-100 border border-green-200 text-sm font-bold"><i class="fa-solid fa-check"></i> قبول</button>
+                        <button onclick="updateStatus(${child.id}, 'rejected')" class="bg-red-50 text-red-600 px-3 py-1 rounded hover:bg-red-100 border border-red-200 text-sm font-bold"><i class="fa-solid fa-xmark"></i> رفض</button>
+                        <button onclick="deleteRow(${child.id})" class="text-gray-400 hover:text-red-500 px-2 py-1"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function updateStatus(id, newStatus) {
+            const index = registrations.findIndex(c => c.id === id);
+            if(index > -1) {
+                registrations[index].status = newStatus;
+                localStorage.setItem('nursery_db', JSON.stringify(registrations));
+                renderAdminTable();
+            }
+        }
+
+        function deleteRow(id) {
+            registrations = registrations.filter(c => c.id !== id);
+            localStorage.setItem('nursery_db', JSON.stringify(registrations));
+            renderAdminTable();
+        }
+
+        function clearAdminData() {
+            if(confirm('هل أنت متأكد من مسح جميع البيانات؟')) {
+                localStorage.removeItem('nursery_db');
+                registrations = [];
+                renderAdminTable();
+            }
+        }
+    </script>
+</body>
+</html>
